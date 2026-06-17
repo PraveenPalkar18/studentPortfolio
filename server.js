@@ -51,6 +51,23 @@ app.use('/', authRoutes);
 app.use('/dashboard', dashboardRoutes);
 app.use('/enrollments', enrollmentRoutes);
 app.use('/projects', projectRoutes);
+// --- PROMETHEUS METRICS ---
+const client = require('prom-client');
+
+// Collect default Node + process metrics
+const collectDefaultMetrics = client.collectDefaultMetrics;
+collectDefaultMetrics();
+
+// Expose metrics endpoint
+app.get('/metrics', async (req, res) => {
+  try {
+    res.set('Content-Type', client.register.contentType);
+    res.end(await client.register.metrics());
+  } catch (ex) {
+    res.status(500).end(ex);
+  }
+});
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
