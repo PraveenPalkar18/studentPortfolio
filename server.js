@@ -64,10 +64,16 @@ app.get('/metrics', async (req, res) => {
     res.set('Content-Type', client.register.contentType);
     res.end(await client.register.metrics());
   } catch (ex) {
-    res.status(500).end(ex);
+    console.error('Metrics collection error:', ex);
+    res.status(500).send('Unable to collect metrics');
   }
 });
 
+app.use((err, req, res, next) => {
+  console.error(err);
+  if (res.headersSent) return next(err);
+  res.status(500).send('An unexpected error occurred. Please try again later.');
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

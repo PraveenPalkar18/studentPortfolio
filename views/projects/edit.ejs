@@ -10,16 +10,16 @@
         <form method="POST" action="/projects/<%= project._id %>?_method=PUT">
           <div class="mb-3">
             <label class="form-label">Title</label>
-            <input type="text" name="title" class="form-control" value="<%= project.title %>" required>
+            <input type="text" name="title" class="form-control" value="<%= project.title %>" maxlength="120" required>
           </div>
           <div class="mb-3">
             <label class="form-label">Description</label>
-            <textarea name="description" class="form-control" rows="3"><%= project.description %></textarea>
+            <textarea name="description" class="form-control" rows="3" maxlength="1000"><%= project.description %></textarea>
           </div>
           <div class="mb-3">
             <label class="form-label">Status</label>
             <select name="status" class="form-select">
-              <option value="PENDING" <%= project.status === 'PENDING' ? 'selected' : '' %>>Pending</option>
+              <option value="PENDING" <%= project.status === 'PENDING' ? 'selected' : '' %>>In progress</option>
               <option value="COMPLETED" <%= project.status === 'COMPLETED' ? 'selected' : '' %>>Completed</option>
             </select>
           </div>

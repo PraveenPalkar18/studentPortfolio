@@ -21,6 +21,34 @@
 </div>
 
 <div class="row g-3">
+  <div class="col-12">
+    <div class="row g-3">
+      <div class="col-6 col-md-3">
+        <div class="card border-0 shadow-sm"><div class="card-body">
+          <div class="small text-muted">Projects</div>
+          <div class="h4 mb-0"><%= projectSummary.total %></div>
+        </div></div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="card border-0 shadow-sm"><div class="card-body">
+          <div class="small text-muted">In progress</div>
+          <div class="h4 mb-0"><%= projectSummary.pending %></div>
+        </div></div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="card border-0 shadow-sm"><div class="card-body">
+          <div class="small text-muted">Completed</div>
+          <div class="h4 mb-0"><%= projectSummary.completed %></div>
+        </div></div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="card border-0 shadow-sm"><div class="card-body">
+          <div class="small text-muted">Overdue</div>
+          <div class="h4 mb-0 text-danger"><%= projectSummary.overdue %></div>
+        </div></div>
+      </div>
+    </div>
+  </div>
   <div class="col-md-6">
     <div class="card border-0 shadow-sm h-100">
       <div class="card-header bg-white border-0">
@@ -63,11 +91,17 @@
                 <span>
                   <strong><%= p.title %></strong>
                   <small class="text-muted d-block">
-                    <%= p.description ? p.description.substring(0, 40) + '...' : '' %>
+                    <%= p.description ? (p.description.length > 40 ? p.description.substring(0, 40) + '...' : p.description) : '' %>
+                    <% if (p.dueDate) { %>
+                      <span class="d-block <%= getDueDateStatus(p.dueDate, p.status) === 'overdue' ? 'text-danger fw-semibold' : 'text-muted' %>">
+                        Due <%= new Date(p.dueDate).toLocaleDateString() %>
+                        <% if (getDueDateStatus(p.dueDate, p.status) === 'overdue') { %> · Overdue<% } %>
+                      </span>
+                    <% } %>
                   </small>
                 </span>
                 <span class="badge <%= p.status === 'COMPLETED' ? 'text-bg-success' : 'text-bg-warning' %> align-self-center">
-                  <%= p.status %>
+                  <%= p.status === 'COMPLETED' ? 'Completed' : 'In progress' %>
                 </span>
               </li>
             <% }) %>
