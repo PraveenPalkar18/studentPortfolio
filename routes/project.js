@@ -8,6 +8,11 @@ const {
   getProjectSummary,
   normalizeProjectFilters
 } = require('../utils/project-tracker');
+const {
+  PROJECT_PRIORITIES,
+  getPriorityClass,
+  getPriorityLabel
+} = require('../utils/project-priority');
 
 const router = express.Router();
 
@@ -28,7 +33,10 @@ router.get('/', requireLogin, async (req, res, next) => {
       filters,
       hasFilters: Boolean(filters.search || filters.status !== 'ALL'),
       summary: getProjectSummary(allProjects),
-      getDueDateStatus
+      getDueDateStatus,
+      projectPriorities: PROJECT_PRIORITIES,
+      getPriorityClass,
+      getPriorityLabel
     });
   } catch (err) {
     next(err);
@@ -37,13 +45,14 @@ router.get('/', requireLogin, async (req, res, next) => {
 
 // Create
 router.post('/', requireLogin, async (req, res, next) => {
-  const { title, description, status, dueDate } = req.body;
+  const { title, description, status, priority, dueDate } = req.body;
   try {
     await Project.create({
       student: req.user._id,
       title,
       description,
       status,
+      priority,
       dueDate: dueDate || null
     });
     res.redirect('/projects');
@@ -60,7 +69,12 @@ router.get('/:id/edit', requireLogin, async (req, res, next) => {
       student: req.user._id
     }).lean();
     if (!project) return res.redirect('/projects');
-    res.render('projects/edit', { user: req.user, project });
+    res.render('projects/edit', {
+      user: req.user,
+      project,
+      projectPriorities: PROJECT_PRIORITIES,
+      getPriorityLabel
+    });
   } catch (err) {
     next(err);
   }
@@ -68,11 +82,11 @@ router.get('/:id/edit', requireLogin, async (req, res, next) => {
 
 // Update
 router.put('/:id', requireLogin, async (req, res, next) => {
-  const { title, description, status, dueDate } = req.body;
+  const { title, description, status, priority, dueDate } = req.body;
   try {
     await Project.findOneAndUpdate(
       { _id: req.params.id, student: req.user._id },
-      { title, description, status, dueDate: dueDate || null },
+      { title, description, status, priority, dueDate: dueDate || null },
       { runValidators: true }
     );
     res.redirect('/projects');

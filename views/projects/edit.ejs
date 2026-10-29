@@ -24,6 +24,16 @@
             </select>
           </div>
           <div class="mb-3">
+            <label class="form-label">Priority</label>
+            <select name="priority" class="form-select">
+              <% projectPriorities.forEach(priority => { %>
+                <option value="<%= priority %>" <%= (project.priority || 'MEDIUM') === priority ? 'selected' : '' %>>
+                  <%= getPriorityLabel(priority) %>
+                </option>
+              <% }) %>
+            </select>
+          </div>
+          <div class="mb-3">
             <label class="form-label">Due Date</label>
             <input type="date" name="dueDate" class="form-control"
                    value="<%= project.dueDate ? new Date(project.dueDate).toISOString().substring(0,10) : '' %>">
