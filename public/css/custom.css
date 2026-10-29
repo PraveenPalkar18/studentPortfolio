@@ -10,3 +10,11 @@ body {
 .navbar-brand {
   letter-spacing: 0.03em;
 }
+
+.card {
+  overflow: hidden;
+}
+
+.table th {
+  white-space: nowrap;
+}
