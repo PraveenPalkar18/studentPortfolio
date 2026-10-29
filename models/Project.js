@@ -1,5 +1,6 @@
 // models/Project.js
 const mongoose = require('mongoose');
+const { PROJECT_PRIORITIES } = require('../utils/project-priority');
 
 const projectSchema = new mongoose.Schema(
   {
@@ -10,6 +11,11 @@ const projectSchema = new mongoose.Schema(
       type: String,
       enum: ['PENDING', 'COMPLETED'],
       default: 'PENDING'
+    },
+    priority: {
+      type: String,
+      enum: PROJECT_PRIORITIES,
+      default: 'MEDIUM'
     },
     dueDate: { type: Date }
   },

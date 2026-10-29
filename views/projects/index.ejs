@@ -64,13 +64,14 @@
             <tr>
               <th>Title</th>
               <th>Status</th>
+              <th>Priority</th>
               <th>Due</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
             <% if (projects.length === 0) { %>
-              <tr><td colspan="4" class="text-center text-muted py-4">
+              <tr><td colspan="5" class="text-center text-muted py-4">
                 <%= hasFilters ? 'No projects match these filters.' : 'No projects yet. Add your first project to get started.' %>
               </td></tr>
             <% } %>
@@ -85,6 +86,11 @@
                 <td>
                   <span class="badge <%= p.status === 'COMPLETED' ? 'text-bg-success' : 'text-bg-warning' %>">
                     <%= p.status === 'COMPLETED' ? 'Completed' : 'In progress' %>
+                  </span>
+                </td>
+                <td>
+                  <span class="badge <%= getPriorityClass(p.priority) %>">
+                    <%= getPriorityLabel(p.priority) %>
                   </span>
                 </td>
                 <td>
@@ -132,6 +138,16 @@
             <select name="status" class="form-select">
               <option value="PENDING">In progress</option>
               <option value="COMPLETED">Completed</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Priority</label>
+            <select name="priority" class="form-select">
+              <% projectPriorities.forEach(priority => { %>
+                <option value="<%= priority %>" <%= priority === 'MEDIUM' ? 'selected' : '' %>>
+                  <%= getPriorityLabel(priority) %>
+                </option>
+              <% }) %>
             </select>
           </div>
           <div class="mb-3">

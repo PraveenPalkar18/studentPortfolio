@@ -92,6 +92,9 @@
                   <strong><%= p.title %></strong>
                   <small class="text-muted d-block">
                     <%= p.description ? (p.description.length > 40 ? p.description.substring(0, 40) + '...' : p.description) : '' %>
+                    <span class="badge <%= getPriorityClass(p.priority) %> ms-1">
+                      <%= getPriorityLabel(p.priority) %> priority
+                    </span>
                     <% if (p.dueDate) { %>
                       <span class="d-block <%= getDueDateStatus(p.dueDate, p.status) === 'overdue' ? 'text-danger fw-semibold' : 'text-muted' %>">
                         Due <%= new Date(p.dueDate).toLocaleDateString() %>

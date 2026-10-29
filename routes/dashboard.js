@@ -4,6 +4,7 @@ const { requireLogin } = require('../middleware/auth');
 const Enrollment = require('../models/Enrollment');
 const Project = require('../models/Project');
 const { getDueDateStatus, getProjectSummary } = require('../utils/project-tracker');
+const { getPriorityClass, getPriorityLabel } = require('../utils/project-priority');
 
 const router = express.Router();
 
@@ -19,7 +20,9 @@ router.get('/', requireLogin, async (req, res, next) => {
       enrollments,
       projects,
       projectSummary: getProjectSummary(projects),
-      getDueDateStatus
+      getDueDateStatus,
+      getPriorityClass,
+      getPriorityLabel
     });
   } catch (err) {
     next(err);
